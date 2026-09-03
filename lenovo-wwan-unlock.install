@@ -1,0 +1,67 @@
+post_install() {
+    cat <<'EOF'
+==> To finish the installation, enable the SAR config service and reload
+    ModemManager:
+
+      sudo systemctl enable --now lenovo-cfgservice.service
+      sudo systemctl restart ModemManager.service
+
+    A reboot is recommended once after installation.
+
+==> Rolling Wireless RW101R-GL modems (USB IDs 33f8:0301/33f8:0302)
+    additionally require fastboot. Install it with:
+
+      sudo pacman -S android-tools
+EOF
+    _suspend_fix_hint
+}
+
+post_upgrade() {
+    post_install
+}
+
+_suspend_fix_hint() {
+    cat <<'EOF'
+==> Optional suspend fix (from upstream suspend-fix/wwan_issue_fix.sh):
+    Applies ONLY to Fibocom L860-GL-16 (8086:7560), Fibocom FM350 (14c3:4d75),
+    Quectel RM520N-GL (1eac:1007), Quectel EM160R-GL (1eac:100d) and
+    Foxconn SDX61 (17cb:0308), and requires ModemManager >= 1.23.2.
+    This step cannot be done by the package. If you have one of these
+    modules, create a systemd override:
+
+      sudo systemctl edit ModemManager.service
+
+    with the following content (check the original ExecStart first with
+    "systemctl cat ModemManager.service" and append the flag to it):
+
+      [Service]
+      ExecStart=
+      ExecStart=/usr/bin/ModemManager --test-low-power-suspend-resume
+
+    Then run:
+
+      sudo systemctl daemon-reload
+      sudo systemctl restart ModemManager.service
+EOF
+}
+
+pre_remove() {
+    # Minimal cleanup: stop and disable the service installed by this package
+    # only if the user enabled it.
+    if [ -e /usr/lib/systemd/system/lenovo-cfgservice.service ]; then
+        systemctl disable --now lenovo-cfgservice.service 2>/dev/null || true
+    fi
+}
+
+post_remove() {
+    cat <<'EOF'
+==> If you created a ModemManager override for the suspend fix, remove only
+    that override file (e.g. /etc/systemd/system/ModemManager.service.d/*.conf
+    you added yourself). Do NOT delete the whole ModemManager.service.d
+    directory, as other packages may keep their own overrides there.
+    Then run:
+
+      sudo systemctl daemon-reload
+      sudo systemctl restart ModemManager.service
+EOF
+}

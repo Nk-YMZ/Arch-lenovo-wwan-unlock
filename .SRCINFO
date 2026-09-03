@@ -1,0 +1,24 @@
+pkgbase = lenovo-wwan-unlock
+	pkgdesc = FCC and DPR unlock for Lenovo PCs
+	pkgver = 4.0.0
+	pkgrel = 1
+	url = https://github.com/lenovo/lenovo-wwan-unlock
+	install = lenovo-wwan-unlock.install
+	arch = x86_64
+	license = LicenseRef-lenovo-software-code-license
+	depends = gcc-libs
+	depends = glib2
+	depends = glibc
+	depends = libmbim
+	depends = libxml2-legacy
+	depends = modemmanager
+	depends = openssl
+	depends = pciutils
+	depends = zlib
+	optdepends = android-tools: fastboot support required for the Rolling Wireless RW101R-GL modem (USB IDs 33f8:0301/33f8:0302)
+	options = !debug
+	options = !strip
+	source = lenovo-wwan-unlock-4.0.0.tar.gz::https://github.com/lenovo/lenovo-wwan-unlock/archive/refs/tags/v4.0.0.tar.gz
+	sha256sums = 08e871e1413f6e9a815ae4e254449b893a1fe637c19f33d3e7cee42dc16871bf
+
+pkgname = lenovo-wwan-unlock

@@ -1,4 +1,5 @@
-# Maintainer: Iyán Méndez Veiga <me (at) iyanmv (dot) com>
+# Maintainer: Nk-YMZ <village_flute (at) outlook (dot) com>
+# Contributor: Iyán Méndez Veiga <me (at) iyanmv (dot) com>
 pkgname=lenovo-wwan-unlock
 pkgver=4.0.0
 pkgrel=1
